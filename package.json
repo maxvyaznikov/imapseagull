@@ -1,0 +1,32 @@
+{
+  "name": "imapseagull",
+  "version": "1.0.0",
+  "description": "Scriptable IMAP server",
+  "main": "lib/server.js",
+  "scripts": {
+    "test": "grunt"
+  },
+  "repository": "git@github.com:maxvyaznikov/imapseagull.git",
+  "keywords": [
+    "IMAP", "Server"
+  ],
+  "dependencies": {
+    "imap-handler": "~0.1.11",
+    "mailcomposer": "~0.2.8",
+    "mailparser": "~0.4.4",
+    "big.js": "~2.4.0",
+    "async": ">=0.2.9",
+    "step": ">=0.0.5",
+    "xtend": ">=2.2.0",
+    "mongojs": ">=0.11.0",
+    "bcrypt-nodejs": ">=0.0.3",
+    "array_flatten": "*"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.6.4",
+    "grunt-contrib-nodeunit": "~0.2.0"
+  },
+  "author": "Max Vyaznikov",
+  "license": "MIT"
+}
