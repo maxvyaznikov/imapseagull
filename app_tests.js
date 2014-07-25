@@ -1,6 +1,4 @@
 
-process.env.MYCLERK_EMAIL_SERVER_DEBUG = true;
-
 var async = require("async");
 var step = require("step");
 var extend = require("xtend");
@@ -9,18 +7,18 @@ var events = require('events');
 var path = require('path');
 var fs = require("fs");
 var bcrypt = require('bcrypt-nodejs');
-var AppStorage = require('./lib/storage_mongo');
+var AppStorage = require('imapseagull-storage-mongo');
+
 var IMAPServer = require('./lib/server');
 
-
-var connection = 'mongodb://localhost:27017/myclerkru?auto_reconnect',
+var connection = process.env.IMAPSEAGULL_CONNECTION || 'mongodb://localhost:27017/localhost?auto_reconnect',
     messages = 'emails_test',
     users = 'users_test',
     db = mongojs(connection, [messages, users]);
 
 var app_tests = {
     port: 143,
-    name: 'test.com',
+    name: 'localhost',
     testuser_email: 'testuser@test.com',
     testuser: null,
 
@@ -54,8 +52,8 @@ var imap_opts = {
         version: '1'
     },
     credentials: {
-        key: fs.readFileSync(path.join(__dirname, '../tls_key.pem')),
-        cert: fs.readFileSync(path.join(__dirname, '../tls_cert.pem'))
+        key: fs.readFileSync(path.join(__dirname, './tests/server.crt')),
+        cert: fs.readFileSync(path.join(__dirname, './tests/server.key'))
     },
     secureConnection: false,
     folders: {
