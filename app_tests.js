@@ -86,7 +86,7 @@ var imap_opts = {
 var storage_opts = {
     name: app_tests.name,
     debug: true,
-    attachments_path: path.join(__dirname, '../attachments'),
+    attachments_path: path.join(__dirname, './'),
     connection: connection,
     messages: messages,
     users: users
