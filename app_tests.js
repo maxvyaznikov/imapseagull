@@ -53,8 +53,8 @@ var imap_opts = {
         version: '1'
     },
     credentials: {
-        key: fs.readFileSync(path.join(__dirname, './tests/server.crt')),
-        cert: fs.readFileSync(path.join(__dirname, './tests/server.key'))
+        key: fs.readFileSync(path.join(__dirname, './tests/server.key')),
+        cert: fs.readFileSync(path.join(__dirname, './tests/server.crt'))
     },
     secureConnection: false,
     folders: {
