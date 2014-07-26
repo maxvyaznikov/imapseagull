@@ -19,7 +19,8 @@ var connection = process.env.IMAPSEAGULL_CONNECTION || 'mongodb://localhost:2701
 var app_tests = {
     port: 143,
     name: 'localhost',
-    testuser_email: 'testuser@test.com',
+    testuser_email: 'testuser@localhost',
+    testuser_pass: 'testpass',
     testuser: null,
 
     db_messages: db[messages],
@@ -86,7 +87,7 @@ var imap_opts = {
 var storage_opts = {
     name: app_tests.name,
     debug: true,
-    attachments_path: path.join(__dirname, './'),
+    attachments_path: path.join(__dirname, './attachments'),
     connection: connection,
     messages: messages,
     users: users
@@ -108,16 +109,15 @@ app_tests.setUp = function(done) {
 
                     console.log('[DB: cleared]');
 
-                    var encrypted_password = 'testpass';
                     bcrypt.genSalt(10, function(err, salt) {
                         if (err) throw new Error(err);
-                        bcrypt.hash(encrypted_password, salt, function() {}, function(err, hash) {
+                        bcrypt.hash(app_tests.testuser_pass, salt, function() {}, function(err, hash) {
                             if (err) throw new Error(err);
-                            encrypted_password = hash;
+                            app_tests.testuser_pass = hash;
 
                             app_tests.db_users.insert({ // add test user
                                 email: app_tests.testuser_email,
-                                password: encrypted_password
+                                password: app_tests.testuser_pass
                             }, function(err, user) {
                                 if (err) throw new Error(err);
 
@@ -205,8 +205,30 @@ app_tests.tearDown = function(done) {
 app_tests.shutdown = function(test) {
     app_tests.imapServer.close(function() {
         app_tests.running = false;
+
+        rmDir(storage_opts.attachments_path);
+
         test.done();
     });
 };
+
+
+// Remove directory recoursivly
+// https://gist.github.com/liangzan/807712
+function rmDir(dirPath) {
+    var files;
+    try { files = fs.readdirSync(dirPath); }
+    catch(e) { return; }
+    if (files && files.length > 0) {
+        for (var i = 0; i < files.length; i++) {
+            var filePath = dirPath + '/' + files[i];
+            if (fs.statSync(filePath).isFile())
+                fs.unlinkSync(filePath);
+            else
+                rmDir(filePath);
+        }
+    }
+    fs.rmdirSync(dirPath);
+}
 
 module.exports = app_tests;
