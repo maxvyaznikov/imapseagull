@@ -15,7 +15,7 @@ First of all, install needed packages:
 
 Later we can write some code to initialize example IMAP Server:
 
-```
+```node
 var IMAPServer = require('imapseagull'),
     AppStorage = require('imapseagull-storage-mongo'),
     fs = require('fs'),
