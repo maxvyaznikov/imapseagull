@@ -15,7 +15,8 @@ First of all, install needed packages:
 
 Later we can write some code to initialize example IMAP Server:
 
-```node
+```js
+
 var IMAPServer = require('imapseagull'),
     AppStorage = require('imapseagull-storage-mongo'),
     fs = require('fs'),
@@ -23,7 +24,7 @@ var IMAPServer = require('imapseagull'),
 
 var NAME = 'test.com';
 
-new AppStorage({
+var storage = new AppStorage({
     name: NAME,
     debug: true,
 
@@ -36,9 +37,11 @@ new AppStorage({
     // collections names
     messages: 'emails',
     users: 'users'
-}, function(err, storage) {
+});
 
-    storage.init(); // function 'init' specified into AppStorage to provide availability to redefine it
+// function 'init' specified into AppStorage to provide availability to redefine it
+storage.init(function(err) {
+    if (err) throw new Error(err);
 
     var imapServer = IMAPServer({
         debug: true,
@@ -48,20 +51,21 @@ new AppStorage({
             version: '1'
         },
         credentials: {
+            // just for example
             key: fs.readFileSync(path.join(__dirname, './node_modules/imapseagull/tests/server.crt')),
             cert: fs.readFileSync(path.join(__dirname, './node_modules/imapseagull/tests/server.key'))
         },
         secureConnection: false,
         storage: storage,
         folders: {
-            'INBOX': {
+            'INBOX': { // Inbox folder may be only here
                 'special-use': '\\Inbox',
                 type: 'personal'
             },
             '': {
                 folders: {
                     'Drafts': {
-                        'special-use': '\\Drafts',
+                        'special-use': '\\Drafts', // 'special-use' feature is in core of our IMAP implementation
                         type: 'personal'
                     },
                     'Sent': {
