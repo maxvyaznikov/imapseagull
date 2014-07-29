@@ -11,7 +11,7 @@ Based on https://github.com/andris9/hoodiecrow with multiusers support, MongoDB 
 
 First of all, install needed packages:
 
-```npm install imapseagull imapseagull-storage-mongo```
+```npm install imapseagull imapseagull-storage-mongo imap-handler```
 
 Later we can write some code to initialize example IMAP Server:
 
@@ -44,7 +44,11 @@ storage.init(function(err) {
     if (err) throw new Error(err);
 
     var imapServer = IMAPServer({
+
+        // Instead of imap-handler (https://github.com/andris9/imap-handler) you can choose
+        // wo-imap-handler (https://github.com/whiteout-io/imap-handler) or anything you want with same API
         imapHandler: require('imap-handler'),
+
         debug: true,
         plugins: [
             // List of plugins. It can be string for modules from lib//plugins/*.js or functions, that will be
