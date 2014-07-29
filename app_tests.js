@@ -98,8 +98,9 @@ app_tests.setUp = function(done) {
     if (!app_tests.running) {
         console.log('[STARTED: setUp]');
 
-        new AppStorage(storage_opts, function(err, storage) {
-            app_tests.storage = storage.init();
+        app_tests.storage = new AppStorage(storage_opts);
+        app_tests.storage.init(function(err, storage) {
+            if (err) throw new Error(err);
 
             app_tests.storage.msgs_remove(null, null, null, function(err) { // DB cleared
                 if (err) throw new Error(err);
