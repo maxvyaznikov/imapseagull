@@ -44,6 +44,7 @@ storage.init(function(err) {
     if (err) throw new Error(err);
 
     var imapServer = IMAPServer({
+        imapHandler: require('imap-handler'),
         debug: true,
         plugins: [
             // List of plugins. It can be string for modules from lib//plugins/*.js or functions, that will be

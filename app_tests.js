@@ -46,6 +46,7 @@ var MAIL_FIELDS = [
 ];
 
 var imap_opts = {
+    imapHandler: require('imap-handler'),
     debug: true,
     plugins: ['ID', 'STARTTLS', 'AUTH-PLAIN', 'SPECIAL-USE', 'NAMESPACE', 'IDLE', /*'LOGINDISABLED',*/ 'SASL-IR', 'ENABLE', 'LITERALPLUS', 'UNSELECT', 'CONDSTORE'],
     id: {
