@@ -45,7 +45,12 @@ storage.init(function(err) {
 
     var imapServer = IMAPServer({
         debug: true,
-        plugins: ['ID', 'STARTTLS', 'AUTH-PLAIN', 'SPECIAL-USE', 'NAMESPACE', 'IDLE', /*'LOGINDISABLED',*/ 'SASL-IR', 'ENABLE', 'LITERALPLUS', 'UNSELECT', 'CONDSTORE'],
+        plugins: [
+            // List of plugins. It can be string for modules from lib//plugins/*.js or functions, that will be
+            // initialized as plugin_fn(<IMAPServer object>)
+            'ID', 'STARTTLS', 'AUTH-PLAIN', 'SPECIAL-USE', 'NAMESPACE', 'IDLE', /*'LOGINDISABLED',*/
+            'SASL-IR', 'ENABLE', 'LITERALPLUS', 'UNSELECT', 'CONDSTORE'
+        ],
         id: {
             name: NAME,
             version: '1'

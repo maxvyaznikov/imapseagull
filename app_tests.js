@@ -47,7 +47,7 @@ var MAIL_FIELDS = [
 
 var imap_opts = {
     debug: true,
-    plugins: ['ID', 'STARTTLS', 'AUTH-PLAIN', 'SPECIAL-USE', 'NAMESPACE', 'IDLE', 'LOGINDISABLED', 'SASL-IR', 'ENABLE', 'LITERALPLUS', 'UNSELECT', 'CONDSTORE'],
+    plugins: ['ID', 'STARTTLS', 'AUTH-PLAIN', 'SPECIAL-USE', 'NAMESPACE', 'IDLE', /*'LOGINDISABLED',*/ 'SASL-IR', 'ENABLE', 'LITERALPLUS', 'UNSELECT', 'CONDSTORE'],
     id: {
         name: app_tests.name,
         version: '1'
@@ -99,7 +99,7 @@ app_tests.setUp = function(done) {
         console.log('[STARTED: setUp]');
 
         app_tests.storage = new AppStorage(storage_opts);
-        app_tests.storage.init(function(err, storage) {
+        app_tests.storage.init(function(err) {
             if (err) throw new Error(err);
 
             app_tests.storage.msgs_remove(null, null, null, function(err) { // DB cleared
