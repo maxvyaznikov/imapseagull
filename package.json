@@ -1,6 +1,6 @@
 {
   "name": "imapseagull",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Scriptable IMAP server",
   "main": "lib/server.js",
   "scripts": {
@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "bcrypt-nodejs": ">=0.0.3",
-    "imapseagull-mongo-storage": ">=1.0.0",
+    "imapseagull-mongo-storage": ">=1.0.1",
     "imap-handler": "~0.1.11",
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.6.4",
