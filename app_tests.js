@@ -126,15 +126,15 @@ app_tests.setUp = function(done) {
                                 app_tests.testuser = user;
                                 console.log('[DB: testuser added]');
 
-                                var imapServer = IMAPServer(extend(imap_opts, {
+                                app_tests.imapServer = IMAPServer(extend(imap_opts, {
                                     storage: app_tests.storage
                                 }));
 
-                                imapServer.on('close', function() {
+                                app_tests.imapServer.on('close', function() {
                                     console.log('IMAP server closed');
                                 });
 
-                                imapServer.listen(app_tests.port, function() {
+                                app_tests.imapServer.listen(app_tests.port, function() {
                                     app_tests.running = true;
 
                                     console.log('[FINISHED: setUp]');
@@ -194,24 +194,17 @@ app_tests.tearDown = function(done) {
     console.log('[STARTED: tearDown]');
     if (app_tests.storage) {
         app_tests.storage.msgs_remove(null, null, null, function () { // DB cleared
-            console.log('[FINISHED: tearDown]');
-            done();
+            app_tests.imapServer.close(function() {
+                app_tests.running = false;
+                rmDir(storage_opts.attachments_path);
+                console.log('[FINISHED: tearDown]');
+                done();
+            });
         }.bind(this));
     } else {
         console.log('[FINISHED: tearDown // no storage]');
         done();
     }
-};
-
-
-app_tests.shutdown = function(test) {
-    app_tests.imapServer.close(function() {
-        app_tests.running = false;
-
-        rmDir(storage_opts.attachments_path);
-
-        test.done();
-    });
 };
 
 
