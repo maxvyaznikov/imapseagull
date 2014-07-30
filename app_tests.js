@@ -11,7 +11,7 @@ var AppStorage = require('imapseagull-storage-mongo');
 
 var IMAPServer = require('./lib/server');
 
-var connection = process.env.IMAPSEAGULL_CONNECTION || 'mongodb://localhost:27017/localhost?auto_reconnect',
+var connection = process.env.IMAPSEAGULL_CONNECTION || 'localhost:27017/localhost?auto_reconnect',
     messages = 'emails_test',
     users = 'users_test',
     db = mongojs(connection, [messages, users]);
@@ -94,9 +94,8 @@ app_tests.storage_opts = {
     users: users
 };
 
-app_tests.createSetUp = function(imap_opts, storage_opts) {
+app_tests.createSetUp = function(imap_opts) {
     imap_opts = extend(app_tests.imap_opts, typeof imap_opts != 'undefined' ? imap_opts : {});
-    storage_opts = extend(app_tests.storage_opts, typeof storage_opts != 'undefined' ? storage_opts : {});
     return function(done) {
         app_tests.uidnext = 1;
         if (!app_tests.running) {
@@ -104,11 +103,11 @@ app_tests.createSetUp = function(imap_opts, storage_opts) {
 
             step(
                 function createAttachmentsPath() {
-                    fs.mkdir(storage_opts.attachments_path, this);
+                    fs.mkdir(app_tests.storage_opts.attachments_path, this);
                 },
                 function initializeStorage(err) {
                     if (err && err.code != 'EEXIST') throw err;
-                    new AppStorage(storage_opts).init(this);
+                    new AppStorage(app_tests.storage_opts).init(this);
                 },
                 function clearDb(err, storage) {
                     if (err) throw err;
