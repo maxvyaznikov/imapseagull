@@ -226,7 +226,7 @@ app_tests.tearDown = function(done) {
 };
 
 
-// Remove directory recoursivly
+// Remove directory recursively
 // https://gist.github.com/liangzan/807712
 function rmDir(dirPath) {
     var files;
