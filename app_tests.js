@@ -99,53 +99,68 @@ app_tests.setUp = function(done) {
     if (!app_tests.running) {
         console.log('[STARTED: setUp]');
 
-        app_tests.storage = new AppStorage(storage_opts);
-        app_tests.storage.init(function(err) {
-            if (err) throw new Error(err);
-
-            app_tests.storage.msgs_remove(null, null, null, function(err) { // DB cleared
-                if (err) throw new Error(err);
-
-                app_tests.db_users.remove({}, function(err) { // DB cleared
+        step(
+            function createAttachmentsPath() {
+                fs.mkdir(storage_opts.attachments_path, this);
+            },
+            function initializeStorage(err) {
+                if (err) throw err;
+                app_tests.storage = new AppStorage(storage_opts);
+                app_tests.storage.init(this);
+            },
+            function clearDb(err) {
+                if (err) throw err;
+                step(
+                    function clearMessages() {
+                        app_tests.storage.msgs_remove(null, null, null, this);
+                    },
+                    function clearUsers(err) {
+                        if (err) throw err;
+                        app_tests.db_users.remove({}, this);
+                    },
+                    function done(err) {
+                        if (err) throw err;
+                        console.log('[DB: cleared]');
+                    }
+                );
+            },
+            function createUser(err) {
+                if (err) throw err;
+                bcrypt.genSalt(10, function(err, salt) {
                     if (err) throw new Error(err);
-
-                    console.log('[DB: cleared]');
-
-                    bcrypt.genSalt(10, function(err, salt) {
+                    bcrypt.hash(app_tests.testuser_pass, salt, function() {}, function(err, hash) {
                         if (err) throw new Error(err);
-                        bcrypt.hash(app_tests.testuser_pass, salt, function() {}, function(err, hash) {
-                            if (err) throw new Error(err);
-                            app_tests.testuser_pass = hash;
+                        app_tests.testuser_pass = hash;
 
-                            app_tests.db_users.insert({ // add test user
-                                email: app_tests.testuser_email,
-                                password: app_tests.testuser_pass
-                            }, function(err, user) {
-                                if (err) throw new Error(err);
+                        app_tests.db_users.insert({ // add test user
+                            email: app_tests.testuser_email,
+                            password: app_tests.testuser_pass
+                        }, function(err, user) {
+                            app_tests.testuser = user;
+                            console.log('[DB: testuser added]');
 
-                                app_tests.testuser = user;
-                                console.log('[DB: testuser added]');
-
-                                app_tests.imapServer = IMAPServer(extend(imap_opts, {
-                                    storage: app_tests.storage
-                                }));
-
-                                app_tests.imapServer.on('close', function() {
-                                    console.log('IMAP server closed');
-                                });
-
-                                app_tests.imapServer.listen(app_tests.port, function() {
-                                    app_tests.running = true;
-
-                                    console.log('[FINISHED: setUp]');
-                                    done();
-                                });
-                            });
-                        });
-                    });
+                            this(err);
+                        }.bind(this));
+                    }.bind(this));
                 }.bind(this));
-            }.bind(this));
-        }.bind(this));
+            },
+            function startServer() {
+                app_tests.imapServer = IMAPServer(extend(imap_opts, {
+                    storage: app_tests.storage
+                }));
+
+                app_tests.imapServer.on('close', function() {
+                    console.log('IMAP server closed');
+                }.bind(this));
+
+                app_tests.imapServer.listen(app_tests.port, function() {
+                    app_tests.running = true;
+
+                    console.log('[FINISHED: setUp]');
+                    done();
+                }.bind(this));
+            }
+        );
     } else {
         console.log('[FINISHED: setUp // already run]');
         done();
