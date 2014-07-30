@@ -104,7 +104,7 @@ module.exports["IMAPServer tests"] = {
             resp = resp.toString();
 
             test.ok(resp.indexOf("\nA3 OK") >= 0);
-            test.ok(resp.indexOf("FLAGS (\\Seen \\Deleted)") < 0);
+            test.ok(resp.indexOf("(FLAGS (\\Seen \\Deleted)") < 0);
 
             test.done();
         }).bind(this));

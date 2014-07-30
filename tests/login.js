@@ -36,7 +36,7 @@ module.exports["Normal login"] = {
 module.exports["LOGINDISABLED"] = {
     setUp: app_tests.setUp,
     tearDown: app_tests.tearDown,
-/*
+
     "Unencrypted login fail": function(test){
         var cmds = ["A1 CAPABILITY",
                 "A2 LOGIN testuser testpass",
@@ -49,7 +49,7 @@ module.exports["LOGINDISABLED"] = {
             test.done();
         }).bind(this));
     },
-*/
+
     "Successful TLS login": function(test){
         var cmds = ["A1 CAPABILITY",
                 "A2 STARTTLS",
