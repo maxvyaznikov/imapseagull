@@ -48,7 +48,7 @@ var app_tests = {
 app_tests.imap_opts = {
     imapHandler: require('imap-handler'),
     debug: true,
-    plugins: ['ID', 'STARTTLS', 'AUTH-PLAIN', 'SPECIAL-USE', 'NAMESPACE', 'IDLE', /*'LOGINDISABLED',*/ 'SASL-IR', 'ENABLE', 'LITERALPLUS', 'UNSELECT', 'CONDSTORE'],
+    plugins: ['ID', 'STARTTLS', 'AUTH-PLAIN', 'SPECIAL-USE', 'NAMESPACE', 'IDLE', 'SASL-IR', 'ENABLE', 'LITERALPLUS', 'UNSELECT', 'CONDSTORE'],
     id: {
         name: app_tests.name,
         version: '1'
@@ -133,11 +133,10 @@ app_tests.createSetUp = function(imap_opts, storage_opts) {
                         if (err) throw new Error(err);
                         bcrypt.hash(app_tests.testuser_pass, salt, function() {}, function(err, hash) {
                             if (err) throw new Error(err);
-                            app_tests.testuser_pass = hash;
 
                             app_tests.db_users.insert({ // add test user
                                 email: app_tests.testuser_email,
-                                password: app_tests.testuser_pass
+                                password: hash
                             }, function(err, user) {
                                 app_tests.testuser = user;
                                 console.log('[DB: testuser added]');

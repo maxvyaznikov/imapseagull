@@ -34,7 +34,9 @@ module.exports["Normal login"] = {
 };
 
 module.exports["LOGINDISABLED"] = {
-    setUp: app_tests.createSetUp(),
+    setUp: app_tests.createSetUp({
+        plugins: ['AUTH-PLAIN', 'STARTTLS', 'SPECIAL-USE', 'LOGINDISABLED']
+    }),
     tearDown: app_tests.tearDown,
 
     "Unencrypted login fail": function(test){
