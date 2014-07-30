@@ -358,7 +358,6 @@ module.exports["IMAPServer tests"] = {
             resp = resp.toString();
 
             test.ok(resp.indexOf('* 2 FETCH (FLAGS (\\Seen) BODY[]'));
-            test.ok(resp.toLowerCase().indexOf(('Subject: hello 2').toLowerCase()) >= 0);
             test.ok(resp.indexOf("\nA3 OK") >= 0);
 
             test.done();
