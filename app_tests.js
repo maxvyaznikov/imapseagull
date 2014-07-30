@@ -130,7 +130,7 @@ app_tests.createSetUp = function(imap_opts, storage_opts) {
                 function createUser(err) {
                     if (err) throw err;
                     bcrypt.genSalt(10, function(err, salt) {
-                        if (err) throw new Error(err);
+                        if (err) throw err;
                         bcrypt.hash(app_tests.testuser_pass, salt, function() {}, function(err, hash) {
                             if (err) throw new Error(err);
 
@@ -146,20 +146,21 @@ app_tests.createSetUp = function(imap_opts, storage_opts) {
                         }.bind(this));
                     }.bind(this));
                 },
-                function startServer() {
+                function startServer(err) {
+                    if (err) throw err;
                     imap_opts.storage = app_tests.storage;
                     app_tests.imapServer = IMAPServer(imap_opts);
 
                     app_tests.imapServer.on('close', function() {
                         console.log('IMAP server closed');
-                    }.bind(this));
+                    });
 
                     app_tests.imapServer.listen(app_tests.port, function() {
                         app_tests.running = true;
 
                         console.log('[FINISHED: setUp]');
                         done();
-                    }.bind(this));
+                    });
                 }
             );
         } else {
@@ -200,7 +201,7 @@ app_tests.addMessages = function(mailbox_name, messages, done) {
             }).end(message);
         }
     }, function(err) {
-        if (err) throw new Error(err);
+        if (err) throw err;
         console.log('[FINISHED: addMessages]');
         done();
     });
