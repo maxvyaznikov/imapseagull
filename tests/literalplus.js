@@ -3,7 +3,7 @@ var app_tests = require("../app_tests");
 var mockClient = require("../mock-client");
 
 module.exports["Literalplus enabled"] = {
-    setUp: app_tests.setUp,
+    setUp: app_tests.createSetUp(),
     tearDown: app_tests.tearDown,
 
     "Login success regular": function(test){

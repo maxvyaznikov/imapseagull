@@ -4,7 +4,7 @@ var mockClient = require("../mock-client");
 
 module.exports["IMAPServer tests"] = {
     setUp: function(done) {
-        app_tests.setUp(function() {
+        app_tests.createSetUp()(function() {
             app_tests.addMessages('INBOX', [
                 {raw: "Subject: hello 1\r\n\r\nWorld 1!", flags: ["\\Seen"]},
                 {raw: "Subject: hello 2\r\n\r\nWorld 1!", flags: ["\\Seen", "\\Deleted"]}
@@ -144,7 +144,7 @@ module.exports["IMAPServer tests"] = {
 
 module.exports["Custom flags not allowed"] = {
     setUp: function(done) {
-        app_tests.setUp(function() {
+        app_tests.createSetUp()(function() {
 
             app_tests.addMessages('INBOX', [
                 {raw: "Subject: hello 1\r\n\r\nWorld 1!", flags: ["\\Seen"]}

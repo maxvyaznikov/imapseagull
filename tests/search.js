@@ -4,7 +4,7 @@ var mockClient = require("../mock-client");
 
 module.exports["Search tests"] = {
     setUp: function(done) {
-        app_tests.setUp(function(err) {
+        app_tests.createSetUp()(function(err) {
 
             app_tests.addMessages('INBOX', [
                 {raw: "Subject: hello 1\r\n\r\nWorld 1!", internaldate: "14-Sep-2013 18:22:28 +0300", flags: ["\\Flagged"]},

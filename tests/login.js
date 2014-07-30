@@ -3,7 +3,7 @@ var app_tests = require("../app_tests");
 var mockClient = require("../mock-client");
 
 module.exports["Normal login"] = {
-    setUp: app_tests.setUp,
+    setUp: app_tests.createSetUp(),
     tearDown: app_tests.tearDown,
 
     "Invalid Login": function(test){
@@ -34,7 +34,7 @@ module.exports["Normal login"] = {
 };
 
 module.exports["LOGINDISABLED"] = {
-    setUp: app_tests.setUp,
+    setUp: app_tests.createSetUp(),
     tearDown: app_tests.tearDown,
 
     "Unencrypted login fail": function(test){

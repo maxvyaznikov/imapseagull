@@ -16,20 +16,6 @@ var connection = process.env.IMAPSEAGULL_CONNECTION || 'mongodb://localhost:2701
     users = 'users_test',
     db = mongojs(connection, [messages, users]);
 
-var app_tests = {
-    port: 143,
-    name: 'localhost',
-    testuser_email: 'testuser@localhost',
-    testuser_pass: 'testpass',
-    testuser: null,
-
-    db_messages: db[messages],
-    db_users: db[users],
-
-    uidnext: null,
-    running: false
-};
-
 var MAIL_FIELDS = [
     'text',
     'headers',
@@ -45,7 +31,21 @@ var MAIL_FIELDS = [
     'uid'
 ];
 
-var imap_opts = {
+var app_tests = {
+    port: 143,
+    name: 'localhost',
+    testuser_email: 'testuser@localhost',
+    testuser_pass: 'testpass',
+    testuser: null,
+
+    db_messages: db[messages],
+    db_users: db[users],
+
+    uidnext: null,
+    running: false
+};
+
+app_tests.imap_opts = {
     imapHandler: require('imap-handler'),
     debug: true,
     plugins: ['ID', 'STARTTLS', 'AUTH-PLAIN', 'SPECIAL-USE', 'NAMESPACE', 'IDLE', /*'LOGINDISABLED',*/ 'SASL-IR', 'ENABLE', 'LITERALPLUS', 'UNSELECT', 'CONDSTORE'],
@@ -85,7 +85,7 @@ var imap_opts = {
         }
     }
 };
-var storage_opts = {
+app_tests.storage_opts = {
     name: app_tests.name,
     debug: true,
     attachments_path: path.join(__dirname, './attachments'),
@@ -94,76 +94,79 @@ var storage_opts = {
     users: users
 };
 
-app_tests.setUp = function(done) {
-    app_tests.uidnext = 1;
-    if (!app_tests.running) {
-        console.log('[STARTED: setUp]');
+app_tests.createSetUp = function(imap_opts, storage_opts) {
+    imap_opts = extend(app_tests.imap_opts, typeof imap_opts != 'undefined' ? imap_opts : {});
+    storage_opts = extend(app_tests.storage_opts, typeof storage_opts != 'undefined' ? storage_opts : {});
+    return function(done) {
+        app_tests.uidnext = 1;
+        if (!app_tests.running) {
+            console.log('[STARTED: setUp]');
 
-        step(
-            function createAttachmentsPath() {
-                fs.mkdir(storage_opts.attachments_path, this);
-            },
-            function initializeStorage(err) {
-                if (err) throw err;
-                app_tests.storage = new AppStorage(storage_opts);
-                app_tests.storage.init(this);
-            },
-            function clearDb(err) {
-                if (err) throw err;
-                step(
-                    function clearMessages() {
-                        app_tests.storage.msgs_remove(null, null, null, this);
-                    },
-                    function clearUsers(err) {
-                        if (err) throw err;
-                        app_tests.db_users.remove({}, this);
-                    },
-                    function done(err) {
-                        if (err) throw err;
-                        console.log('[DB: cleared]');
-                    }
-                );
-            },
-            function createUser(err) {
-                if (err) throw err;
-                bcrypt.genSalt(10, function(err, salt) {
-                    if (err) throw new Error(err);
-                    bcrypt.hash(app_tests.testuser_pass, salt, function() {}, function(err, hash) {
-                        if (err) throw new Error(err);
-                        app_tests.testuser_pass = hash;
-
-                        app_tests.db_users.insert({ // add test user
-                            email: app_tests.testuser_email,
-                            password: app_tests.testuser_pass
-                        }, function(err, user) {
-                            app_tests.testuser = user;
-                            console.log('[DB: testuser added]');
-
+            step(
+                function createAttachmentsPath() {
+                    fs.mkdir(storage_opts.attachments_path, this);
+                },
+                function initializeStorage(err) {
+                    if (err && err.code != 'EEXIST') throw err;
+                    new AppStorage(storage_opts).init(this);
+                },
+                function clearDb(err, storage) {
+                    if (err) throw err;
+                    app_tests.storage = storage;
+                    step(
+                        function clearMessages() {
+                            app_tests.storage.msgs_remove(null, null, null, this);
+                        },
+                        function clearUsers(err) {
+                            if (err) throw err;
+                            app_tests.db_users.remove({}, this);
+                        },
+                        function done(err) {
+                            console.log('[DB: cleared]');
                             this(err);
+                        }.bind(this)
+                    );
+                },
+                function createUser(err) {
+                    if (err) throw err;
+                    bcrypt.genSalt(10, function(err, salt) {
+                        if (err) throw new Error(err);
+                        bcrypt.hash(app_tests.testuser_pass, salt, function() {}, function(err, hash) {
+                            if (err) throw new Error(err);
+                            app_tests.testuser_pass = hash;
+
+                            app_tests.db_users.insert({ // add test user
+                                email: app_tests.testuser_email,
+                                password: app_tests.testuser_pass
+                            }, function(err, user) {
+                                app_tests.testuser = user;
+                                console.log('[DB: testuser added]');
+
+                                this(err);
+                            }.bind(this));
                         }.bind(this));
                     }.bind(this));
-                }.bind(this));
-            },
-            function startServer() {
-                app_tests.imapServer = IMAPServer(extend(imap_opts, {
-                    storage: app_tests.storage
-                }));
+                },
+                function startServer() {
+                    imap_opts.storage = app_tests.storage;
+                    app_tests.imapServer = IMAPServer(imap_opts);
 
-                app_tests.imapServer.on('close', function() {
-                    console.log('IMAP server closed');
-                }.bind(this));
+                    app_tests.imapServer.on('close', function() {
+                        console.log('IMAP server closed');
+                    }.bind(this));
 
-                app_tests.imapServer.listen(app_tests.port, function() {
-                    app_tests.running = true;
+                    app_tests.imapServer.listen(app_tests.port, function() {
+                        app_tests.running = true;
 
-                    console.log('[FINISHED: setUp]');
-                    done();
-                }.bind(this));
-            }
-        );
-    } else {
-        console.log('[FINISHED: setUp // already run]');
-        done();
+                        console.log('[FINISHED: setUp]');
+                        done();
+                    }.bind(this));
+                }
+            );
+        } else {
+            console.log('[FINISHED: setUp // already run]');
+            done();
+        }
     }
 };
 
@@ -211,7 +214,7 @@ app_tests.tearDown = function(done) {
         app_tests.storage.msgs_remove(null, null, null, function () { // DB cleared
             app_tests.imapServer.close(function() {
                 app_tests.running = false;
-                rmDir(storage_opts.attachments_path);
+                rmDir(app_tests.storage_opts.attachments_path);
                 console.log('[FINISHED: tearDown]');
                 done();
             });

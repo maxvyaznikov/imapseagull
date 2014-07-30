@@ -5,7 +5,7 @@ var mockClient = require("../mock-client");
 var debug = false;
 
 module.exports["Normal login"] = {
-    setUp: app_tests.setUp,
+    setUp: app_tests.createSetUp(),
     tearDown: app_tests.tearDown,
 
     "Append simple": function(test){

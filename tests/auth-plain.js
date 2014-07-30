@@ -3,7 +3,7 @@ var app_tests = require("../app_tests");
 var mockClient = require("../mock-client");
 
 module.exports["Auth Plain"] = {
-    setUp: app_tests.setUp,
+    setUp: app_tests.createSetUp(),
     tearDown: app_tests.tearDown,
 
     "Invalid Login": function(test){
@@ -36,7 +36,7 @@ module.exports["Auth Plain"] = {
 };
 
 module.exports["Auth Plain with SASL-IR"] = {
-    setUp: app_tests.setUp,
+    setUp: app_tests.createSetUp(),
     tearDown: app_tests.tearDown,
 
     "Invalid Login": function(test){

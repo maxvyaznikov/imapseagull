@@ -6,7 +6,7 @@ var debug = false;
 
 module.exports["IMAPServer tests"] = {
     setUp: function(done) {
-        app_tests.setUp(function(err) {
+        app_tests.createSetUp()(function(err) {
 
             app_tests.addMessages('INBOX', [
                 {
