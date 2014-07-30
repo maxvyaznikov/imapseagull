@@ -12,7 +12,7 @@ module.exports["IMAPServer tests"] = {
             ], done);
         });
     },
-    tearDown: app_tests.tearDown/*,
+    tearDown: app_tests.tearDown,
 
     "FETCH X-GM-MSGID": function(test){
         var cmds = ["A1 LOGIN testuser testpass",
@@ -105,5 +105,5 @@ module.exports["IMAPServer tests"] = {
 
             test.done();
         }).bind(this));
-    }*/
+    }
 };

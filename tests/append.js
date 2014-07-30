@@ -28,26 +28,26 @@ module.exports["Normal login"] = {
         });
     },
 
-//    "Append flags": function(test){
-//        var message = "From: sender <sender@example.com>\r\nTo: receiver@example.com\r\nSubject: HELLO!\r\n\r\nWORLD!";
-//        var cmds = ["A1 CAPABILITY",
-//                "A2 LOGIN testuser testpass",
-//                "A3 SELECT INBOX",
-//                "A4 APPEND INBOX (MyFlag) {" + message.length + "}\r\n"+message,
-//                "A5 FETCH 1 (FLAGS BODY[HEADER.FIELDS (Subject)])",
-//                "ZZ LOGOUT"];
-//
-//        mockClient(app_tests.port, "localhost", cmds, false, (function(err, resp){
-//            resp = resp.toString();
-//            test.ok(resp.indexOf("\nA2 OK") >= 0);
-//            test.ok(resp.indexOf("\nA3 OK") >= 0);
-//            test.ok(resp.indexOf("\nA4 OK") >= 0);
-//            test.ok(resp.indexOf("\nA5 OK") >= 0);
-//            test.ok(resp.indexOf("MyFlag") >= 0);
-//            test.ok(resp.indexOf("\nSubject: HELLO!") >= 0);
-//            test.done();
-//        }).bind(this));
-//    },
+    "Append flags": function(test){
+        var message = "From: sender <sender@example.com>\r\nTo: receiver@example.com\r\nSubject: HELLO!\r\n\r\nWORLD!";
+        var cmds = ["A1 CAPABILITY",
+                "A2 LOGIN testuser testpass",
+                "A3 SELECT INBOX",
+                "A4 APPEND INBOX (MyFlag) {" + message.length + "}\r\n"+message,
+                "A5 FETCH 1 (FLAGS BODY[HEADER.FIELDS (Subject)])",
+                "ZZ LOGOUT"];
+
+        mockClient(app_tests.port, "localhost", cmds, false, (function(err, resp){
+            resp = resp.toString();
+            test.ok(resp.indexOf("\nA2 OK") >= 0);
+            test.ok(resp.indexOf("\nA3 OK") >= 0);
+            test.ok(resp.indexOf("\nA4 OK") >= 0);
+            test.ok(resp.indexOf("\nA5 OK") >= 0);
+            test.ok(resp.indexOf("MyFlag") >= 0);
+            test.ok(resp.indexOf("\nSubject: HELLO!") >= 0);
+            test.done();
+        }).bind(this));
+    },
 
     "Append internaldate": function(test){
         var message = "From: sender <sender@example.com>\r\nTo: receiver@example.com\r\nSubject: HELLO!\r\n\r\nWORLD!";

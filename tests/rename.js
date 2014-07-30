@@ -5,7 +5,7 @@ var mockClient = require("../mock-client");
 module.exports["Rename"] = {
     setUp: app_tests.setUp,
     tearDown: app_tests.tearDown,
-/*
+
     "Rename success": function(test){
         var message = "From: sender <sender@example.com>\r\nTo: receiver@example.com\r\nSubject: HELLO!\r\n\r\nWORLD!";
         var cmds = ["A1 CAPABILITY",
@@ -22,5 +22,4 @@ module.exports["Rename"] = {
             test.done();
         }).bind(this));
     }
-*/
 };
