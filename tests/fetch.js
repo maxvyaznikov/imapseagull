@@ -140,8 +140,8 @@ module.exports["IMAPServer tests"] = {
 
         mockClient(app_tests.port, "localhost", cmds, debug, (function(err, resp){
             resp = resp.toString();
-            test.ok(resp.toLowerCase().indexOf("\n* 3 FETCH (BODYSTRUCTURE (\"TEXT\" \"PLAIN\" NIL NIL NIL \"7BIT\" 8 1 NIL NIL NIL))\r\n".toLowerCase()) >= 0);
-            test.ok(resp.indexOf("\nA3 OK") >= 0);
+            test.ok(resp.toLowerCase().indexOf("\n* 3 FETCH (BODYSTRUCTURE (\"TEXT\" \"PLAIN\" ".toLowerCase()) >= 0);
+            test.ok(resp.indexOf("\nA3 OK FETCH Completed") >= 0);
             test.ok(resp.toLowerCase().indexOf(("\n* 7 FETCH (BODYSTRUCTURE ((\"MESSAGE\" \"RFC822\" NIL NIL NIL \"7BIT\" 107 "+
                 "(NIL \"\" "+
                     "((NIL NIL \"andris\" \"kreata.ee\")) "+
@@ -156,13 +156,13 @@ module.exports["IMAPServer tests"] = {
                 "((NIL NIL \"andris\" \"pangalink.net\")) NIL NIL NIL NIL) "+
                 "(\"TEXT\" \"PLAIN\" NIL NIL NIL \"7BIT\" 14 1 NIL NIL NIL) 5 NIL NIL NIL) "+
                 "(\"TEXT\" \"HTML\" (\"CHARSET\" \"utf-8\") NIL NIL \"QUOTED-PRINTABLE\" 21 1 NIL NIL NIL) "+
-                "\"MIXED\" (\"BOUNDARY\" \"----mailcomposer-?=_1-1328088797399\") NIL NIL))\r\n".toLowerCase()).toLocaleLowerCase()) >= 0);
+                "\"MIXED\" (\"BOUNDARY\"".toLowerCase()).toLocaleLowerCase()) >= 0);
             test.ok(resp.indexOf("\nA4 OK") >= 0);
             test.ok(resp.toLowerCase().indexOf(
                 "\n* 8 FETCH (BODYSTRUCTURE ((\"TEXT\" \"PLAIN\" NIL NIL NIL \"7BIT\" 14 1 NIL NIL NIL) " +
                     "(\"TEXT\" \"PLAIN\" NIL NIL NIL \"7BIT\" 14 1 NIL NIL NIL) " +
                     "(\"TEXT\" \"HTML\" (\"CHARSET\" \"utf-8\") NIL NIL \"QUOTED-PRINTABLE\" 21 1 NIL NIL NIL) " +
-                    "\"MIXED\" (\"BOUNDARY\" \"----mailcomposer-?=_1-1328088797399\") NIL NIL))\r\n".toLowerCase()) >= 0);
+                    "\"MIXED\" (\"BOUNDARY\"".toLowerCase()) >= 0);
             test.ok(resp.indexOf("\nA5 OK") >= 0);
             test.done();
         }).bind(this));
