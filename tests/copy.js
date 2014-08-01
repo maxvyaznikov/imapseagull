@@ -21,8 +21,8 @@ module.exports["IMAPServer tests"] = {
     "COPY": function(test){
         var cmds = ["A1 LOGIN testuser testpass",
                 "A2 SELECT INBOX",
-                "A3 COPY 1:* &BCcENQRABD0EPgQyBDgEOgQ4-",
-                "A4 SELECT &BCcENQRABD0EPgQyBDgEOgQ4-",
+                "A3 COPY 1:* Drafts",
+                "A4 SELECT Drafts",
                 "ZZ LOGOUT"];
 
         mockClient(app_tests.port, "localhost", cmds, false, (function(err, resp){

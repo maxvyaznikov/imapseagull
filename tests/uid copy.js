@@ -23,8 +23,8 @@ module.exports["IMAPServer tests"] = {
     "UID COPY STRING": function(test){
         var cmds = ["A1 LOGIN testuser testpass",
                 "A2 SELECT INBOX",
-                "A3 UID COPY 1:* \"&BCMENAQwBDsENQQ9BD0ESwQ1-\"",
-                "A4 SELECT \"&BCMENAQwBDsENQQ9BD0ESwQ1-\"",
+                "A3 UID COPY 1:* \"Trash\"",
+                "A4 SELECT \"Trash\"",
                 "ZZ LOGOUT"];
 
         mockClient(app_tests.port, "localhost", cmds, false, (function(err, resp){
@@ -38,8 +38,8 @@ module.exports["IMAPServer tests"] = {
     "UID COPY ATOM": function(test){
         var cmds = ["A1 LOGIN testuser testpass",
                 "A2 SELECT INBOX",
-                "A3 UID COPY 1:* &BCEEPwQwBDw-",
-                "A4 SELECT &BCEEPwQwBDw-",
+                "A3 UID COPY 1:* Junk",
+                "A4 SELECT Junk",
                 "ZZ LOGOUT"];
 
         mockClient(app_tests.port, "localhost", cmds, false, (function(err, resp){
