@@ -24,7 +24,7 @@ module.exports["IMAPServer tests"] = {
     },
     tearDown: app_tests.tearDown,
 
-    "Mark as Seen": function(test){
+    "Mark as Seen by fetching a body": function(test){
         var cmds = ["A1 LOGIN testuser testpass",
                 "A2 SELECT INBOX",
                 "A3 UID FETCH 2 BODY[]",
