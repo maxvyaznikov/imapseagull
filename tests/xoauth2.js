@@ -1,4 +1,4 @@
-
+/*
 var app_tests = require("../app_tests");
 var mockClient = require("../mock-client");
 
@@ -56,3 +56,4 @@ module.exports["XOAUTH2"] = {
         }).bind(this));
     }
 };
+*/

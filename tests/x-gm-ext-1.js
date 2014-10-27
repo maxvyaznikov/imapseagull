@@ -1,4 +1,4 @@
-
+/*
 var app_tests = require("../app_tests");
 var mockClient = require("../mock-client");
 
@@ -107,3 +107,4 @@ module.exports["IMAPServer tests"] = {
         }).bind(this));
     }
 };
+*/

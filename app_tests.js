@@ -213,7 +213,11 @@ app_tests.tearDown = function(done) {
         app_tests.storage.msgs_remove(null, null, null, function () { // DB cleared
             app_tests.imapServer.close(function() {
                 app_tests.running = false;
-                rmDir(app_tests.storage_opts.attachments_path);
+                try {
+                    rmDir(app_tests.storage_opts.attachments_path);
+                } catch(e) {
+                    console.log(e);
+                }
                 console.log('[FINISHED: tearDown]');
                 done();
             });
