@@ -8,19 +8,20 @@
   },
   "repository": "git@github.com:maxvyaznikov/imapseagull.git",
   "keywords": [
-    "IMAP", "Server"
+    "IMAP",
+    "Server"
   ],
   "dependencies": {
-    "async": ">=0.2.9",
-    "step": ">=0.0.5",
-    "xtend": ">=2.2.0",
-    "mongojs": "~0.11.0",
     "array_flatten": "*",
-    "big.js": "~2.4.0"
+    "async": ">=0.2.9",
+    "big.js": "~2.4.0",
+    "deep-extend": "^0.4.1",
+    "mongojs": "~0.11.0",
+    "step": ">=0.0.5",
+    "xtend": ">=2.2.0"
   },
   "devDependencies": {
     "bcrypt-nodejs": ">=0.0.3",
-    "imapseagull-mongo-storage": ">=1.0.2",
     "imap-handler": "~0.1.11",
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.6.4",
