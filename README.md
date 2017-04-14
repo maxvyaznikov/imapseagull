@@ -1,6 +1,10 @@
 imapseagull
 ===========
 
+# WARNING!
+
+Project no longer maintained! Please, see on https://github.com/wildduck-email/wildduck
+
 # IMAP Server, NodeJS
 
 Supported all commands of IMAP4rev1, but might be a bit buggy.
